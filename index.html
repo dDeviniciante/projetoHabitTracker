@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Habit Tracker</title>
+    <script>
+      window.tailwind = {
+        config: {
+          safelist: [
+            'bg-white',
+            'text-black',
+            'bg-zinc-950',
+            'text-zinc-400',
+            'bg-zinc-900',
+            'border-zinc-800',
+            'border-zinc-700',
+            'bg-green-500',
+            'bg-green-800',
+            'bg-zinc-800',
+            'hover:bg-white',
+            'hover:border-white',
+            'hover:bg-zinc-800',
+            'hover:scale-105',
+            'hover:scale-[1.01]',
+            'grid-cols-[180px_repeat(7,minmax(40px,1fr))]',
+            'min-h-[56px]',
+            'min-w-[520px]',
+            'rounded-t-2xl',
+            'w-fit',
+            'aspect-square',
+          ],
+        },
+      };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-zinc-950 text-white">
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      function HabitTrackerWireframe() {
+        const habits = [
+          {
+            emoji: '📘',
+            name: 'Estudar Matemática',
+            streak: 12,
+            progress: [true, true, true, false, true, true, false],
+          },
+          {
+            emoji: '💻',
+            name: 'Programação',
+            streak: 8,
+            progress: [true, false, true, true, true, false, false],
+          },
+          {
+            emoji: '📚',
+            name: 'Leitura',
+            streak: 21,
+            progress: [true, true, true, true, true, true, true],
+          },
+          {
+            emoji: '🏋️',
+            name: 'Treino',
+            streak: 5,
+            progress: [false, true, true, false, true, false, true],
+          },
+        ];
+
+        const weekdays = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'];
+
+        const metricTypes = [
+          '✔ Apenas concluir',
+          '⏱ Tempo',
+          '📄 Páginas',
+          '📏 Distância',
+          '🔁 Quantidade',
+          '🏋️ Repetições',
+        ];
+
+        return (
+          <div className="min-h-screen bg-zinc-950 text-white p-6 lg:p-8">
+            <div className="max-w-7xl mx-auto space-y-8">
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <h1 className="text-4xl font-bold tracking-tight">Habit Tracker</h1>
+                  <p className="text-zinc-400 mt-2">
+                    Organize hábitos, acompanhe consistência e visualize progresso.
+                  </p>
+                </div>
+                <button className="bg-white text-black px-5 py-3 rounded-2xl font-medium hover:scale-105 transition">
+                  + Novo hábito
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 xl:grid-cols-[0.95fr_1.05fr] gap-8">
+                <div className="space-y-6">
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+                      <div>
+                        <p className="text-zinc-500 text-sm">Hoje</p>
+                        <h2 className="text-3xl font-bold mt-1">Seus hábitos diários</h2>
+                      </div>
+                      <div className="bg-zinc-950 border border-zinc-800 px-4 py-2 rounded-2xl text-sm text-zinc-400 w-fit">
+                        Quinta-feira
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      {habits.map((habit) => (
+                        <div
+                          key={habit.name}
+                          className="bg-zinc-950 border border-zinc-800 rounded-2xl p-5 flex items-center justify-between gap-4 hover:bg-zinc-900 transition"
+                        >
+                          <div className="flex items-center gap-4 min-w-0">
+                            <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-2xl shrink-0">
+                              {habit.emoji}
+                            </div>
+                            <div className="min-w-0">
+                              <h3 className="font-semibold text-lg truncate">{habit.name}</h3>
+                              <p className="text-zinc-500 text-sm mt-1">Sequência atual: {habit.streak} dias</p>
+                            </div>
+                          </div>
+                          <button
+                            aria-label={`Concluir hábito ${habit.name}`}
+                            className="w-8 h-8 rounded-xl border border-zinc-700 bg-zinc-900 hover:bg-white hover:border-white transition shrink-0"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-6">
+                      <div>
+                        <p className="text-zinc-500 text-sm">Visualização</p>
+                        <h2 className="text-2xl font-semibold mt-1">Calendário de hábitos</h2>
+                      </div>
+                      <div className="flex gap-2 flex-wrap">
+                        <button className="bg-white text-black px-4 py-2 rounded-xl text-sm font-medium">Dia</button>
+                        <button className="bg-zinc-950 border border-zinc-800 px-4 py-2 rounded-xl text-sm">Semana</button>
+                        <button className="bg-zinc-950 border border-zinc-800 px-4 py-2 rounded-xl text-sm">Mês</button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 overflow-x-auto pb-2">
+                      {habits.map((habit, index) => (
+                        <div
+                          key={habit.name}
+                          className="grid grid-cols-[180px_repeat(7,minmax(40px,1fr))] gap-2 items-center min-w-[520px]"
+                        >
+                          <div className="flex items-center gap-2 text-sm text-zinc-400">
+                            <span>{habit.emoji}</span>
+                            <span>{habit.name}</span>
+                          </div>
+                          {Array.from({ length: 7 }).map((_, i) => (
+                            <div
+                              key={`${habit.name}-${i}`}
+                              className={`h-10 rounded-xl border ${
+                                i % (index + 2) === 0 ? 'bg-white border-white' : 'bg-zinc-950 border-zinc-800'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 space-y-6">
+                    <div>
+                      <p className="text-zinc-500 text-sm">Criar hábito</p>
+                      <h2 className="text-2xl font-semibold mt-1">Adicionar novo hábito</h2>
+                    </div>
+
+                    <div className="space-y-3">
+                      <label className="text-sm text-zinc-400">Qual hábito?</label>
+                      <div className="flex gap-3">
+                        <button className="w-14 h-14 rounded-2xl bg-zinc-950 border border-zinc-800 text-2xl hover:bg-zinc-800 transition shrink-0">📘</button>
+                        <input placeholder="Ex: Ler" className="flex-1 bg-zinc-950 border border-zinc-800 rounded-2xl px-4 outline-none min-h-[56px]" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <label className="text-sm text-zinc-400">Quantos dias na semana?</label>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+                        {weekdays.map((day, index) => (
+                          <button
+                            key={day}
+                            className={`py-3 rounded-2xl text-sm font-medium transition ${
+                              index <= 4 ? 'bg-white text-black' : 'bg-zinc-950 border border-zinc-800 text-zinc-500'
+                            }`}
+                          >
+                            {day}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <label className="text-sm text-zinc-400">Como esse hábito será medido?</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {metricTypes.map((metric, index) => (
+                          <button
+                            key={metric}
+                            className={`p-4 rounded-2xl text-left border transition ${
+                              index === 2 ? 'bg-white text-black border-white' : 'bg-zinc-950 border border-zinc-800 hover:bg-zinc-800'
+                            }`}
+                          >
+                            {metric}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <label className="text-sm text-zinc-400">Meta diária</label>
+                      <div className="flex gap-3">
+                        <input placeholder="20" className="flex-1 bg-zinc-950 border border-zinc-800 rounded-2xl px-4 py-4 outline-none" />
+                        <button className="bg-zinc-950 border border-zinc-800 rounded-2xl px-5 text-zinc-400 whitespace-nowrap">páginas</button>
+                      </div>
+                    </div>
+
+                    <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-4 space-y-2">
+                      <p className="text-sm text-zinc-400">Como o desempenho será calculado</p>
+                      <p className="text-sm text-zinc-500 leading-relaxed">
+                        Este hábito acontecerá apenas de segunda a sexta. O sistema calculará sua consistência apenas nesses dias.
+                      </p>
+                      <div className="flex items-center justify-between pt-2 text-sm gap-4">
+                        <span className="text-zinc-400">Dias esperados no mês</span>
+                        <span className="font-semibold text-white whitespace-nowrap">20 dias</span>
+                      </div>
+                    </div>
+
+                    <button className="w-full bg-white text-black py-4 rounded-2xl font-semibold hover:scale-[1.01] transition">Criar hábito</button>
+                  </div>
+
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+                    <div className="flex items-center justify-between mb-6 gap-4">
+                      <div>
+                        <p className="text-zinc-500 text-sm">Desempenho</p>
+                        <h2 className="text-2xl font-semibold mt-1">Estatísticas</h2>
+                      </div>
+                      <button className="bg-zinc-950 border border-zinc-800 px-4 py-2 rounded-xl text-sm hover:bg-zinc-800 transition whitespace-nowrap">Ver detalhes</button>
+                    </div>
+
+                    <div className="space-y-5">
+                      <div>
+                        <div className="flex justify-between text-sm mb-2 text-zinc-400">
+                          <span>Consistência semanal</span>
+                          <span>84%</span>
+                        </div>
+                        <div className="flex items-end gap-2 h-28">
+                          {[45, 70, 55, 90, 60, 100, 80].map((height) => (
+                            <div
+                              key={height}
+                              className="flex-1 bg-white rounded-t-2xl opacity-90"
+                              style={{ height: `${height}%` }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-4">
+                          <p className="text-zinc-500 text-sm">Melhor streak</p>
+                          <h3 className="text-3xl font-bold mt-2">21</h3>
+                        </div>
+                        <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-4">
+                          <p className="text-zinc-500 text-sm">Dias ativos</p>
+                          <h3 className="text-3xl font-bold mt-2">142</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
+                    <h2 className="text-xl font-semibold mb-4">Heatmap</h2>
+                    <div className="grid grid-cols-7 gap-2">
+                      {Array.from({ length: 35 }).map((_, i) => (
+                        <div
+                          key={`heat-${i}`}
+                          className={`aspect-square rounded-md ${
+                            i % 4 === 0 ? 'bg-green-500' : i % 3 === 0 ? 'bg-green-800' : 'bg-zinc-800'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<HabitTrackerWireframe />);
+    </script>
+  </body>
+</html>

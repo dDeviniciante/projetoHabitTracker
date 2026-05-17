@@ -24,7 +24,7 @@
                 Organize hábitos, acompanhe consistência e visualize progresso.
               </p>
             </div>
-            <button class="bg-white text-black px-5 py-3 rounded-2xl font-medium hover:scale-105 transition">
+            <button @click="showCreateModal = true" class="bg-white text-black px-5 py-3 rounded-2xl font-medium hover:scale-105 transition">
               + Novo hábito
             </button>
           </div>
@@ -36,7 +36,6 @@
             </div>
 
             <div class="space-y-6">
-              <HabitForm :weekdays="weekdays" :metricTypes="metricTypes" />
               <StatsPanel />
               <Heatmap />
             </div>
@@ -44,11 +43,24 @@
         </div>
       </div>
     </div>
+
+    <transition name="fade">
+      <div v-if="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/60" @click="showCreateModal = false"></div>
+
+        <div class="relative w-full max-w-3xl max-h-[90vh] overflow-auto rounded-3xl bg-zinc-900 border border-zinc-800 p-6 m-4">
+          <button @click="showCreateModal = false" class="absolute right-4 top-4 rounded-full bg-zinc-800 p-2">
+            ✕
+          </button>
+          <HabitForm :weekdays="weekdays" :metricTypes="metricTypes" />
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import HabitList from './components/HabitList.vue'
 import HabitCalendar from './components/HabitCalendar.vue'
 import HabitForm from './components/HabitForm.vue'
@@ -57,6 +69,14 @@ import Heatmap from './components/Heatmap.vue'
 import Sidebar from './components/Sidebar.vue'
 
 const sidebarOpen = ref(true)
+const showCreateModal = ref(false)
+
+onMounted(() => {
+  const onKey = (e) => {
+    if (e.key === 'Escape') showCreateModal.value = false
+  }
+  window.addEventListener('keydown', onKey)
+})
 
 const habits = [
   {
